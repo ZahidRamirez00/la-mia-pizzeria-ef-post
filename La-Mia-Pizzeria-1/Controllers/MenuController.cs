@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using La_Mia_Pizzeria_1.Models;
 using La_Mia_Pizzeria_1.Utils;
 using System.Diagnostics;
+using La_Mia_Pizzeria_1.DataBase;
 
 namespace La_Mia_Pizzeria_1.Controllers
 {
@@ -9,14 +11,30 @@ namespace La_Mia_Pizzeria_1.Controllers
     {
         public IActionResult Index()
         {
-            List<Pizza> listaDellePizze = PizzeData.GetPizze();
-
-            return View("Index", listaDellePizze);
+            using(PizzeContext db = new PizzeContext())
+            {
+                //List<Pizza> listaDellePizze = PizzeData.GetPizze();
+                List<Pizza> listaDellePizze = db.Pizze.ToList<Pizza>();
+                return View("Index", listaDellePizze);
+            }
         }
 
         public IActionResult Details(int id)
         {
-            List<Pizza> listaDellePizze = PizzeData.GetPizze();
+            using(PizzeContext db = new PizzeContext())
+            {
+                Pizza pizzaTrovato = db.Pizze
+                    .Where(SingolaPizzaNelDb => SingolaPizzaNelDb.Id == id)
+                    .FirstOrDefault();
+
+                if (pizzaTrovato != null)
+                {
+                    return View(pizzaTrovato);
+                }
+                
+                return NotFound("La pizza con l'id cercato non esiste!");
+            }
+            /*List<Pizza> listaDellePizze = PizzeData.GetPizze();
 
             foreach (Pizza pizza in listaDellePizze)
             {
@@ -26,7 +44,7 @@ namespace La_Mia_Pizzeria_1.Controllers
                 }
             }
 
-            return NotFound("Il post con l'id cercato non esiste!");
+            return NotFound("Il post con l'id cercato non esiste!");*/
         }
 
         public IActionResult Esempio(string nome, string cognome, int eta)
