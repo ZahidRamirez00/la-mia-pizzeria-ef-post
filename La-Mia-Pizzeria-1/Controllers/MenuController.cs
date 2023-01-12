@@ -4,6 +4,7 @@ using La_Mia_Pizzeria_1.Models;
 using La_Mia_Pizzeria_1.Utils;
 using System.Diagnostics;
 using La_Mia_Pizzeria_1.DataBase;
+using Microsoft.Extensions.Hosting;
 
 namespace La_Mia_Pizzeria_1.Controllers
 {
@@ -47,9 +48,98 @@ namespace La_Mia_Pizzeria_1.Controllers
             return NotFound("Il post con l'id cercato non esiste!");*/
         }
 
-        public IActionResult Esempio(string nome, string cognome, int eta)
+        [HttpGet]
+        public IActionResult Create()
         {
-            return Ok("Hai inserito parametro nome: " + nome + " parametro cognome: " + cognome + " parametro eta: " + eta);
+            return View("Create");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Pizza formData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", formData);
+            }
+
+            using (PizzeContext db = new PizzeContext())
+            {
+                db.Pizze.Add(formData);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Update(int id)
+        {
+            using (PizzeContext db = new PizzeContext())
+            {
+                Pizza pizzaToUpdate = db.Pizze.Where(Pizza => Pizza.Id == id).FirstOrDefault();
+
+                if (pizzaToUpdate == null)
+                {
+                    return NotFound("La pizza non è stata trovata");
+                }
+
+                return View("Update", pizzaToUpdate);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(Pizza formData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Update", formData);
+            }
+
+            using (PizzeContext db = new PizzeContext())
+            {
+                Pizza pizzaToUpdate = db.Pizze.Where(Pizza => Pizza.Id == formData.Id).FirstOrDefault();
+
+                if (pizzaToUpdate != null)
+                {
+                    pizzaToUpdate.Name = formData.Name;
+                    pizzaToUpdate.Description = formData.Description;
+                    pizzaToUpdate.Image = formData.Image;
+                    pizzaToUpdate.Prezzo = formData.Prezzo;
+
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return NotFound("La pizza che volevi modificare non è stata trovata!");
+                }
+            }
+
+        }
+
+        
+        public IActionResult Delete(int id)
+        {
+            using (PizzeContext db = new PizzeContext())
+            {
+                Pizza pizzaToDelete = db.Pizze.Where(Pizza => Pizza.Id == id).FirstOrDefault();
+
+                if (pizzaToDelete != null)
+                {
+                    db.Pizze.Remove(pizzaToDelete);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return NotFound("La pizza da eliminare non è stata trovata!");
+                }
+            }
         }
     }
 }
