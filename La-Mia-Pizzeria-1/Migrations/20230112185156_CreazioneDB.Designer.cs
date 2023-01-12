@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaMiaPizzeria1.Migrations
 {
     [DbContext(typeof(PizzeContext))]
-    [Migration("20230112170543_CreazioneDB")]
+    [Migration("20230112185156_CreazioneDB")]
     partial class CreazioneDB
     {
         /// <inheritdoc />
@@ -46,9 +46,8 @@ namespace LaMiaPizzeria1.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Prezzo")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
+                    b.Property<double>("Prezzo")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

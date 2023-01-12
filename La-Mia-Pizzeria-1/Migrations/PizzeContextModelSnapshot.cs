@@ -43,9 +43,8 @@ namespace LaMiaPizzeria1.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Prezzo")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
+                    b.Property<double>("Prezzo")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

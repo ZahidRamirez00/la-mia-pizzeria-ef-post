@@ -19,7 +19,7 @@ namespace LaMiaPizzeria1.Migrations
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Prezzo = table.Column<string>(type: "varchar(20)", nullable: false)
+                    Prezzo = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

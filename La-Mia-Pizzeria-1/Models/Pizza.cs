@@ -18,7 +18,7 @@ namespace La_Mia_Pizzeria_1.Models
         [Url]
         [StringLength(300, ErrorMessage = "Il campo titolo non può contenere più di 300 caratteri")]
         public string Image { get; set; }
-        [Column(TypeName = "varchar(20)")]
+        
         [Required]
         [Range(1, 100)]
         public double Prezzo { get; set; }

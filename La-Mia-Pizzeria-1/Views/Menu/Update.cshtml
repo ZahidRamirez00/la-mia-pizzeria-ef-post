@@ -20,7 +20,7 @@
         </div>
         <div class="mb-3">
             <label>Prezzo Pizza:</label>
-            <input asp-for="Prezzo" type="number" class="form-control">
+            <input asp-for="Prezzo" type="number" min="0" max="100" class="form-control">
             <span asp-validation-for="Prezzo" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary">Modifica</button>
